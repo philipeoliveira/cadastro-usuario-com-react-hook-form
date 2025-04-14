@@ -18,7 +18,7 @@ function App() {
                      htmlFor='firstName'
                      className='block text-md font-medium px-1 text-zinc-300'
                   >
-                     Nome
+                     <span>*</span>Nome
                   </label>
                   <input
                      type='text'
@@ -34,7 +34,7 @@ function App() {
                      htmlFor='lastName'
                      className='block text-md font-medium px-1 text-zinc-300'
                   >
-                     Sobrenome
+                     <span>*</span>Sobrenome
                   </label>
                   <input
                      type='text'
@@ -50,7 +50,7 @@ function App() {
                      htmlFor='phone'
                      className='block text-md font-medium px-1 text-zinc-300'
                   >
-                     Telefone celular
+                     <span>*</span>Telefone celular
                   </label>
                   <input
                      type='tel'
@@ -66,7 +66,7 @@ function App() {
                      htmlFor='cpf'
                      className='block text-md font-medium px-1 text-zinc-300'
                   >
-                     CPF
+                     <span>*</span>CPF
                   </label>
                   <input
                      type='text'
@@ -82,7 +82,7 @@ function App() {
                      htmlFor='cep'
                      className='block text-md font-medium px-1 text-zinc-300'
                   >
-                     CEP
+                     <span>*</span>CEP
                   </label>
                   <input
                      type='text'
@@ -99,7 +99,7 @@ function App() {
                         htmlFor='address'
                         className='block text-md font-medium px-1 text-zinc-300'
                      >
-                        Endereço
+                        <span>*</span>Endereço
                      </label>
                      <input
                         type='text'
@@ -132,7 +132,7 @@ function App() {
                      htmlFor='city'
                      className='block text-md font-medium px-1 text-zinc-300'
                   >
-                     Cidade
+                     <span>*</span>Cidade
                   </label>
                   <input
                      type='text'
@@ -154,7 +154,7 @@ function App() {
                      htmlFor='email'
                      className='block text-md font-medium px-1 text-zinc-300'
                   >
-                     E-mail
+                     <span>*</span>E-mail
                   </label>
                   <input
                      type='email'
@@ -171,7 +171,7 @@ function App() {
                         htmlFor='password'
                         className='block text-md font-medium px-1 text-zinc-300'
                      >
-                        Senha
+                        <span>*</span>Senha
                      </label>
                      <div className='relative'>
                         <input
@@ -191,7 +191,7 @@ function App() {
                         htmlFor='confirmPassword'
                         className='block text-md font-medium px-1 text-zinc-300'
                      >
-                        Confirmar senha
+                        <span>*</span>Confirmar senha
                      </label>
                      <div className='relative'>
                         <input
@@ -227,7 +227,7 @@ function App() {
                         className='w-4 h-4 text-gray-600 bg-zinc-700 border-zinc-600 rounded focus:ring-gray-500'
                      />
                      <span className='text-sm text-zinc-300'>
-                        Aceito todos os{' '}
+                        <span>*</span>Aceito todos os{' '}
                         <a
                            href='#'
                            className='border-b border-dotted hover:border-solid hover:text-white'
@@ -238,6 +238,8 @@ function App() {
                   </label>
                </div>
             </fieldset>
+
+            <p className='text-sm text-zinc-400'>* Campos obrigatórios</p>
 
             <button
                type='submit'
