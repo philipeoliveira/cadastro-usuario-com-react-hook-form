@@ -3,7 +3,7 @@ import { Eye } from '@phosphor-icons/react';
 function App() {
    return (
       <main className='min-h-screen flex flex-col items-center justify-center bg-zinc-900 md:p-4'>
-         <h1 className='w-full max-w-3xl text-2xl font-semibold text-center text-zinc-100 bg-linear-to-t from-gray-600 to-gray-700 md:rounded-t-lg p-4 pb-5'>
+         <h1 className='w-full max-w-3xl text-2xl font-semibold text-center text-zinc-100 bg-linear-to-t from-gray-600 to-gray-700 md:rounded-t-lg border-b border-zinc-500 p-4 pb-5'>
             Cadastro de Usuário
          </h1>
          <form className='w-full max-w-3xl bg-zinc-800 rounded-b-lg shadow-xl p-6 space-y-6'>
