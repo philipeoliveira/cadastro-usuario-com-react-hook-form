@@ -8,8 +8,8 @@ function App() {
             <h2 className='text-zinc-400'>Formulário com React Hook Form e Zod</h2>
          </div>
          <form className='w-full max-w-3xl bg-zinc-800 rounded-b-lg shadow-xl p-6 space-y-6'>
-            <fieldset className='flex flex-col gap-5 border border-zinc-700 rounded-lg p-5'>
-               <legend className='pt-1 pb-1.5 px-3 md:px-8 border border-zinc-700 rounded-lg text-lg font-semibold text-zinc-300'>
+            <fieldset className='flex flex-col gap-5 bg-zinc-700/20 border border-zinc-700 rounded-lg p-5'>
+               <legend className='pt-1 pb-1.5 px-3 md:px-8 bg-zinc-800 border border-zinc-700 rounded-lg text-lg font-semibold text-zinc-300'>
                   Dados Pessoais
                </legend>
 
@@ -144,8 +144,8 @@ function App() {
                </div>
             </fieldset>
 
-            <fieldset className='flex flex-col gap-5 border border-zinc-700 rounded-lg p-5'>
-               <legend className='pt-1 pb-1.5 px-3 md:px-8 border border-zinc-700 rounded-lg text-lg font-semibold text-zinc-300'>
+            <fieldset className='flex flex-col gap-5 bg-zinc-700/20 border border-zinc-700 rounded-lg p-5'>
+               <legend className='pt-1 pb-1.5 px-3 md:px-8 bg-zinc-800 border border-zinc-700 rounded-lg text-lg font-semibold text-zinc-300'>
                   Credenciais
                </legend>
 
@@ -209,8 +209,8 @@ function App() {
                </div>
             </fieldset>
 
-            <fieldset className='flex flex-col gap-5 border border-zinc-700 rounded-lg p-5'>
-               <legend className='pt-1 pb-1.5 px-3 md:px-8 border border-zinc-700 rounded-lg text-lg font-semibold text-zinc-300'>
+            <fieldset className='flex flex-col gap-5 bg-zinc-700/20 border border-zinc-700 rounded-lg p-5'>
+               <legend className='pt-1 pb-1.5 px-3 md:px-8 bg-zinc-800 border border-zinc-700 rounded-lg text-lg font-semibold text-zinc-300'>
                   Termos de Uso
                </legend>
 
