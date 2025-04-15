@@ -1,9 +1,24 @@
 import { useState } from 'react';
 import { Eye, EyeSlash } from '@phosphor-icons/react';
+import { withMask } from 'use-mask-input';
 
 function App() {
    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
    const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
+   const [address, setAddress] = useState({ city: '', state: '' });
+
+   async function handleZipCodeBlur(event: React.FocusEvent<HTMLInputElement>) {
+      setAddress({ city: '', state: '' });
+
+      const zipCode = event.target.value;
+
+      const response = await fetch(`https://brasilapi.com.br/api/cep/v2/${zipCode}`);
+
+      if (response.ok) {
+         const data = await response.json();
+         setAddress({ city: data.city, state: data.state });
+      }
+   }
 
    return (
       <main className='min-h-screen flex flex-col items-center justify-center md:p-4'>
@@ -63,6 +78,7 @@ function App() {
                      id='phone'
                      name='phone'
                      required
+                     ref={withMask('(99) 99999-9999')}
                      className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md text-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600'
                   />
                </div>
@@ -79,6 +95,7 @@ function App() {
                      id='cpf'
                      name='cpf'
                      required
+                     ref={withMask('999.999.999-99')}
                      className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md text-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600'
                   />
                </div>
@@ -95,6 +112,8 @@ function App() {
                      id='cep'
                      name='cep'
                      required
+                     ref={withMask('99999-999')}
+                     onBlur={handleZipCodeBlur}
                      className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md text-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600'
                   />
                </div>
@@ -127,26 +146,45 @@ function App() {
                         type='text'
                         id='addressNumber'
                         name='addressNumber'
-                        required
                         className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md text-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600'
                      />
                   </div>
                </div>
 
-               <div className='space-y-2'>
-                  <label
-                     htmlFor='city'
-                     className='block text-md font-medium px-1 text-zinc-300'
-                  >
-                     <span>*</span>Cidade
-                  </label>
-                  <input
-                     type='text'
-                     id='city'
-                     name='city'
-                     required
-                     className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md text-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600'
-                  />
+               <div className='grid grid-cols-1 md:grid-cols-[minmax(200px,_1fr)_150px] gap-4'>
+                  <div className='space-y-2'>
+                     <label
+                        htmlFor='city'
+                        className='block text-md font-medium px-1 text-zinc-300'
+                     >
+                        <span>*</span>Cidade
+                     </label>
+                     <input
+                        type='text'
+                        id='city'
+                        required
+                        disabled
+                        value={address.city}
+                        className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md text-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600 disabled:bg-zinc-800'
+                     />
+                  </div>
+
+                  <div className='space-y-2'>
+                     <label
+                        htmlFor='state'
+                        className='block text-md font-medium px-1 text-zinc-300'
+                     >
+                        <span>*</span>Estado
+                     </label>
+                     <input
+                        type='text'
+                        id='state'
+                        required
+                        disabled
+                        value={address.state}
+                        className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md text-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600 disabled:bg-zinc-800'
+                     />
+                  </div>
                </div>
             </fieldset>
 
