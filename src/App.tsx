@@ -1,6 +1,10 @@
-import { Eye } from '@phosphor-icons/react';
+import { useState } from 'react';
+import { Eye, EyeSlash } from '@phosphor-icons/react';
 
 function App() {
+   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
+
    return (
       <main className='min-h-screen flex flex-col items-center justify-center md:p-4'>
          <div className='flex flex-col items-center justify-center gap-1 w-full max-w-3xl bg-linear-to-t from-gray-600 to-gray-700 md:rounded-t-lg border-b border-zinc-500 p-4 pb-5'>
@@ -175,14 +179,30 @@ function App() {
                      </label>
                      <div className='relative'>
                         <input
-                           type='password'
+                           type={isPasswordVisible ? 'text' : 'password'}
                            id='password'
                            name='password'
                            required
                            className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-gray-500'
                         />
                         <span className='absolute right-3 top-2'>
-                           <Eye size={24} />
+                           <button
+                              type='button'
+                              className='cursor-pointer'
+                              title={
+                                 isPasswordVisible ? 'Ocultar senha' : 'Mostrar senha'
+                              }
+                              aria-label={
+                                 isPasswordVisible ? 'Ocultar senha' : 'Mostrar senha'
+                              }
+                              onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+                           >
+                              {isPasswordVisible ? (
+                                 <Eye size={24} />
+                              ) : (
+                                 <EyeSlash size={24} />
+                              )}
+                           </button>
                         </span>
                      </div>
                   </div>
@@ -195,14 +215,36 @@ function App() {
                      </label>
                      <div className='relative'>
                         <input
-                           type='password'
+                           type={isConfirmPasswordVisible ? 'text' : 'password'}
                            id='confirmPassword'
                            name='confirmPassword'
                            required
                            className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-gray-500'
                         />
                         <span className='absolute right-3 top-2'>
-                           <Eye size={24} />
+                           <button
+                              type='button'
+                              className='cursor-pointer'
+                              title={
+                                 isConfirmPasswordVisible
+                                    ? 'Ocultar senha'
+                                    : 'Mostrar senha'
+                              }
+                              aria-label={
+                                 isConfirmPasswordVisible
+                                    ? 'Ocultar senha'
+                                    : 'Mostrar senha'
+                              }
+                              onClick={() =>
+                                 setIsConfirmPasswordVisible(!isConfirmPasswordVisible)
+                              }
+                           >
+                              {isConfirmPasswordVisible ? (
+                                 <Eye size={24} />
+                              ) : (
+                                 <EyeSlash size={24} />
+                              )}
+                           </button>
                         </span>
                      </div>
                   </div>
