@@ -7,9 +7,9 @@ function App() {
 
    return (
       <main className='min-h-screen flex flex-col items-center justify-center md:p-4'>
-         <div className='flex flex-col items-center justify-center gap-1 w-full max-w-3xl bg-linear-to-t from-gray-600 to-gray-700 md:rounded-t-lg border-b border-zinc-500 p-4 pb-5'>
+         <div className='flex flex-col items-center justify-center gap-1 w-full max-w-3xl bg-linear-to-t from-teal-600 to-teal-800 md:rounded-t-lg border-b border-teal-500 p-4 pb-5'>
             <h1 className='text-2xl font-semibold'>Cadastro de Usuário</h1>
-            <h2 className='text-zinc-400'>Formulário com React Hook Form e Zod</h2>
+            <h2 className='text-zinc-300'>Formulário com React Hook Form e Zod</h2>
          </div>
          <form className='w-full max-w-3xl bg-zinc-800 rounded-b-lg shadow-xl p-6 space-y-6'>
             <fieldset className='flex flex-col gap-5 bg-zinc-700/20 border border-zinc-700 rounded-lg p-5'>
@@ -29,7 +29,7 @@ function App() {
                      id='firstName'
                      name='firstName'
                      required
-                     className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-gray-500'
+                     className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-teal-600'
                   />
                </div>
 
@@ -45,7 +45,7 @@ function App() {
                      id='lastName'
                      name='lastName'
                      required
-                     className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-gray-500'
+                     className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-teal-600'
                   />
                </div>
 
@@ -61,7 +61,7 @@ function App() {
                      id='phone'
                      name='phone'
                      required
-                     className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-gray-500'
+                     className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-teal-600'
                   />
                </div>
 
@@ -77,7 +77,7 @@ function App() {
                      id='cpf'
                      name='cpf'
                      required
-                     className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-gray-500'
+                     className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-teal-600'
                   />
                </div>
 
@@ -93,7 +93,7 @@ function App() {
                      id='cep'
                      name='cep'
                      required
-                     className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-gray-500'
+                     className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-teal-600'
                   />
                </div>
 
@@ -110,7 +110,7 @@ function App() {
                         id='address'
                         name='address'
                         required
-                        className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-gray-500'
+                        className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-teal-600'
                      />
                   </div>
 
@@ -126,7 +126,7 @@ function App() {
                         id='addressNumber'
                         name='addressNumber'
                         required
-                        className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-gray-500'
+                        className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-teal-600'
                      />
                   </div>
                </div>
@@ -143,7 +143,7 @@ function App() {
                      id='city'
                      name='city'
                      required
-                     className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-gray-500'
+                     className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-teal-600'
                   />
                </div>
             </fieldset>
@@ -165,7 +165,7 @@ function App() {
                      id='email'
                      name='email'
                      required
-                     className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-gray-500'
+                     className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-teal-600'
                   />
                </div>
 
@@ -183,7 +183,7 @@ function App() {
                            id='password'
                            name='password'
                            required
-                           className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-gray-500'
+                           className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-teal-600'
                         />
                         <span className='absolute right-3 top-2'>
                            <button
@@ -219,7 +219,7 @@ function App() {
                            id='confirmPassword'
                            name='confirmPassword'
                            required
-                           className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-gray-500'
+                           className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-teal-600'
                         />
                         <span className='absolute right-3 top-2'>
                            <button
@@ -266,7 +266,7 @@ function App() {
                         id='terms'
                         name='terms'
                         required
-                        className='w-4 h-4 text-gray-600 bg-zinc-700 border-zinc-600 rounded focus:ring-gray-500'
+                        className='w-4 h-4 text-gray-600 bg-zinc-700 border-zinc-600 rounded focus:outline-none focus:ring-2 focus:ring-teal-600'
                      />
                      <span className='text-sm text-zinc-300'>
                         <span>*</span>Aceito todos os{' '}
@@ -285,7 +285,7 @@ function App() {
 
             <button
                type='submit'
-               className='w-full bg-gray-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-zinc-800 transition-colors cursor-pointer'
+               className='w-full bg-teal-800 text-white font-semibold py-2 px-4 rounded-md hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-600 focus:ring-offset-2 focus:ring-offset-zinc-800 transition-colors cursor-pointer'
             >
                Cadastrar
             </button>
