@@ -7,40 +7,61 @@ import { ErrorMessage } from '@hookform/error-message';
 function App() {
    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
    const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
-   const [address, setAddress] = useState({ city: '', state: '' });
 
    const {
       register,
+      setValue,
+      setError,
+      clearErrors,
       handleSubmit,
       formState: { isSubmitting, errors },
    } = useForm();
 
+   const [loadingZipcode, setLoadingZipcode] = useState(false);
    const registerWithMask = useHookFormMask(register);
 
    async function handleZipCodeBlur(event: React.FocusEvent<HTMLInputElement>) {
-      setAddress({ city: '', state: '' });
+      setValue('city', '');
+      setValue('state', '');
+      clearErrors('zipcode');
 
-      const zipCode = event.target.value;
+      const zipcode = event.target.value;
 
-      const response = await fetch(`https://brasilapi.com.br/api/cep/v2/${zipCode}`);
-
-      if (response.ok) {
+      setLoadingZipcode(true);
+      try {
+         if (zipcode === '') {
+            return;
+         }
+         const response = await fetch(`https://brasilapi.com.br/api/cep/v2/${zipcode}`);
+         if (!response.ok) {
+            throw new Error('Erro ao buscar informações do CEP.');
+         }
          const data = await response.json();
-         setAddress({ city: data.city, state: data.state });
+         setValue('city', data.city);
+         setValue('state', data.state);
+         clearErrors('zipcode');
+         clearErrors('city');
+         clearErrors('state');
+
          console.log(data);
+      } catch (error) {
+         setError('zipcode', { message: 'CEP não encontrado.' });
+      } finally {
+         setLoadingZipcode(false);
       }
    }
 
    async function onSubmit(data: FieldValues) {
-      console.log('Form submitted', data);
-
-      /*       const response = await fetch('https://apis.codante.io/api/register-user/register', {
+      const response = await fetch('https://apis.codante.io/api/register-user/register', {
          method: 'POST',
+         headers: {
+            'Content-Type': 'application/json',
+         },
          body: JSON.stringify(data),
       });
 
       const resData = await response.json();
-      console.log(resData); */
+      console.log(resData);
    }
 
    return (
@@ -62,15 +83,15 @@ function App() {
 
                <div className='space-y-2'>
                   <label
-                     htmlFor='firstName'
+                     htmlFor='name'
                      className='block text-md font-medium px-1 text-zinc-300'
                   >
                      <span>*</span>Nome
                   </label>
                   <input
                      type='text'
-                     id='firstName'
-                     {...register('firstName', {
+                     id='name'
+                     {...register('name', {
                         required: 'O Nome deve ser preenchido.',
                         minLength: {
                            value: 2,
@@ -85,7 +106,7 @@ function App() {
                      className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md text-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600'
                   />
                   <p className='text-orange-400 text-sm px-1'>
-                     <ErrorMessage errors={errors} name='firstName' />
+                     <ErrorMessage errors={errors} name='name' />
                   </p>
                </div>
 
@@ -170,14 +191,14 @@ function App() {
 
                <div className='space-y-2'>
                   <label
-                     htmlFor='cep'
+                     htmlFor='zipcode'
                      className='block text-md font-medium px-1 text-zinc-300'
                   >
                      <span>*</span>CEP
                   </label>
                   <input
                      type='text'
-                     id='cep'
+                     id='zipcode'
                      {...registerWithMask('zipcode', '99999-999', {
                         required: 'O CEP deve ser preenchido.',
                         pattern: {
@@ -190,6 +211,12 @@ function App() {
                      className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md text-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600'
                   />
                   <p className='text-orange-400 text-sm px-1'>
+                     {loadingZipcode && (
+                        <span className='flex items-center gap-1'>
+                           <SpinnerGap size={20} className='animate-spin' />
+                           Buscando informações do CEP...
+                        </span>
+                     )}
                      <ErrorMessage errors={errors} name='zipcode' />
                   </p>
                </div>
@@ -264,11 +291,15 @@ function App() {
                      <input
                         type='text'
                         id='city'
-                        {...register('city')}
-                        value={address.city}
+                        {...register('city', {
+                           required: 'A Cidade deve ser preenchida.',
+                        })}
                         disabled
                         className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md text-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600 disabled:bg-zinc-800'
                      />
+                     <p className='text-orange-400 text-sm px-1'>
+                        <ErrorMessage errors={errors} name='city' />
+                     </p>
                   </div>
 
                   <div className='space-y-2'>
@@ -281,11 +312,15 @@ function App() {
                      <input
                         type='text'
                         id='state'
-                        {...register('state')}
-                        value={address.state}
+                        {...register('state', {
+                           required: 'Preencha o Estado.',
+                        })}
                         disabled
                         className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md text-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600 disabled:bg-zinc-800'
                      />
+                     <p className='text-orange-400 text-sm px-1'>
+                        <ErrorMessage errors={errors} name='state' />
+                     </p>
                   </div>
                </div>
             </fieldset>
@@ -473,7 +508,7 @@ function App() {
                {isSubmitting ? (
                   <>
                      <SpinnerGap size={20} className='animate-spin' />
-                     Cadastrando
+                     Cadastrando...
                   </>
                ) : (
                   'Cadastrar'
