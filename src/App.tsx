@@ -7,6 +7,7 @@ import { ErrorMessage } from '@hookform/error-message';
 function App() {
    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
    const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
+   const [loadingZipcode, setLoadingZipcode] = useState(false);
 
    const {
       register,
@@ -17,7 +18,6 @@ function App() {
       formState: { isSubmitting, errors },
    } = useForm();
 
-   const [loadingZipcode, setLoadingZipcode] = useState(false);
    const registerWithMask = useHookFormMask(register);
 
    async function handleZipCodeBlur(event: React.FocusEvent<HTMLInputElement>) {
@@ -28,22 +28,24 @@ function App() {
       const zipcode = event.target.value;
 
       setLoadingZipcode(true);
+
       try {
          if (zipcode === '') {
             return;
          }
+
          const response = await fetch(`https://brasilapi.com.br/api/cep/v2/${zipcode}`);
+
          if (!response.ok) {
             throw new Error('Erro ao buscar informações do CEP.');
          }
+
          const data = await response.json();
          setValue('city', data.city);
          setValue('state', data.state);
          clearErrors('zipcode');
          clearErrors('city');
          clearErrors('state');
-
-         console.log(data);
       } catch (error) {
          setError('zipcode', { message: 'CEP não encontrado.' });
       } finally {
@@ -426,6 +428,11 @@ function App() {
                                  value: 24,
                                  message:
                                     'A Confirmação deve ter no máximo 24 caracteres.',
+                              },
+                              validate: (value, formValues) => {
+                                 if (value !== formValues.password) {
+                                    return 'As senhas não coincidem.';
+                                 }
                               },
                            })}
                            maxLength={24}
