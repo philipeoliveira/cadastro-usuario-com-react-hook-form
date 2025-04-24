@@ -1,13 +1,16 @@
 import { useState } from 'react';
 import { Eye, EyeSlash, SpinnerGap } from '@phosphor-icons/react';
-import { useHookFormMask } from 'use-mask-input';
 import { FieldValues, useForm } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
+import { useHookFormMask } from 'use-mask-input';
+import { SubmitMessage } from './components/SubmitMessage';
 
 function App() {
    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
    const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
    const [loadingZipcode, setLoadingZipcode] = useState(false);
+   const [submitSuccessMessage, setSubmitSuccessMessage] = useState('');
+   const [submitErrorMessage, submitSetErrorMessage] = useState(false);
 
    const {
       register,
@@ -15,6 +18,7 @@ function App() {
       setError,
       clearErrors,
       handleSubmit,
+      reset,
       formState: { isSubmitting, errors },
    } = useForm();
 
@@ -47,13 +51,16 @@ function App() {
          clearErrors('city');
          clearErrors('state');
       } catch (error) {
-         setError('zipcode', { message: 'CEP não encontrado.' });
+         setError('zipcode', { type: 'manual', message: 'CEP não encontrado.' });
       } finally {
          setLoadingZipcode(false);
       }
    }
 
    async function onSubmit(data: FieldValues) {
+      setSubmitSuccessMessage('');
+      submitSetErrorMessage(false);
+
       const response = await fetch('https://apis.codante.io/api/register-user/register', {
          method: 'POST',
          headers: {
@@ -63,7 +70,20 @@ function App() {
       });
 
       const resData = await response.json();
-      console.log(resData);
+
+      if (!response.ok) {
+         for (const field in resData.errors) {
+            submitSetErrorMessage(true);
+            // Exibindo mensagem de erro vinda do back-end
+            setError(field, { type: 'manual', message: resData.errors[field] });
+            console.log(resData);
+         }
+      } else {
+         reset();
+         setSubmitSuccessMessage(resData.message);
+         console.log(resData);
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
    }
 
    return (
@@ -74,6 +94,18 @@ function App() {
             </h1>
             <h2 className='text-zinc-300'>Formulário com React Hook Form e Zod</h2>
          </div>
+         {submitSuccessMessage && (
+            <SubmitMessage
+               textColor='text-teal-600'
+               messageText={`${submitSuccessMessage} (Usuário cadastrado com sucesso!)`}
+            />
+         )}
+         {submitErrorMessage && (
+            <SubmitMessage
+               textColor='text-orange-400'
+               messageText='Erro ao cadastrar usuário.'
+            />
+         )}
          <form
             onSubmit={handleSubmit(onSubmit)}
             className='w-full max-w-3xl bg-zinc-800 rounded-b-lg shadow-xl p-6 space-y-6'
@@ -151,6 +183,7 @@ function App() {
                   <input
                      type='tel'
                      id='phone'
+                     placeholder='(__) _____-____'
                      {...registerWithMask('phone', '(99) 99999-9999', {
                         required: 'O Telefone celular deve ser preenchido.',
                         pattern: {
@@ -176,6 +209,7 @@ function App() {
                   <input
                      type='text'
                      id='cpf'
+                     placeholder='___.___.___-__'
                      {...registerWithMask('cpf', '999.999.999-99', {
                         required: 'O CPF deve ser preenchido.',
                         pattern: {
@@ -201,6 +235,7 @@ function App() {
                   <input
                      type='text'
                      id='zipcode'
+                     placeholder='_____-___'
                      {...registerWithMask('zipcode', '99999-999', {
                         required: 'O CEP deve ser preenchido.',
                         pattern: {
@@ -260,7 +295,7 @@ function App() {
                         Número
                      </label>
                      <input
-                        type='text'
+                        type='number'
                         id='addressNumber'
                         {...register('addressNumber', {
                            maxLength: {
@@ -294,7 +329,7 @@ function App() {
                         type='text'
                         id='city'
                         {...register('city', {
-                           required: 'A Cidade deve ser preenchida.',
+                           required: 'Obtenha a Cidade através do CEP.',
                         })}
                         disabled
                         className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md text-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600 disabled:bg-zinc-800'
@@ -315,7 +350,7 @@ function App() {
                         type='text'
                         id='state'
                         {...register('state', {
-                           required: 'Preencha o Estado.',
+                           required: 'Obtenha o Estado através do CEP.',
                         })}
                         disabled
                         className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md text-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600 disabled:bg-zinc-800'
