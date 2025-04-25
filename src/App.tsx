@@ -161,11 +161,11 @@ function App() {
                            message: 'O Sobrenome deve ter no mínimo 2 caracteres.',
                         },
                         maxLength: {
-                           value: 40,
-                           message: 'O Sobrenome deve ter no máximo 40 caracteres.',
+                           value: 100,
+                           message: 'O Sobrenome deve ter no máximo 100 caracteres.',
                         },
                      })}
-                     maxLength={40}
+                     maxLength={100}
                      className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md text-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600'
                   />
                   <p className='text-orange-400 text-sm px-1'>
