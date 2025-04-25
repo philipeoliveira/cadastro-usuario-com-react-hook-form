@@ -9,8 +9,9 @@ function App() {
    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
    const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
    const [loadingZipcode, setLoadingZipcode] = useState(false);
+   // Mensagens ao submeter os dados, exibidas no topo do formulário
    const [submitSuccessMessage, setSubmitSuccessMessage] = useState('');
-   const [submitErrorMessage, submitSetErrorMessage] = useState(false);
+   const [submitErrorMessage, submitSetErrorMessage] = useState('');
 
    const {
       register,
@@ -45,12 +46,16 @@ function App() {
          }
 
          const data = await response.json();
+
+         // Preenchendo os campos Cidade e Estado com os dados do CEP
          setValue('city', data.city);
          setValue('state', data.state);
+
          clearErrors('zipcode');
          clearErrors('city');
          clearErrors('state');
       } catch (error) {
+         // Se receber uma exceção direta do fetch (CORS ou timeout) e não uma resposta do back-end
          setError('zipcode', { type: 'manual', message: 'CEP não encontrado.' });
       } finally {
          setLoadingZipcode(false);
@@ -59,30 +64,38 @@ function App() {
 
    async function onSubmit(data: FieldValues) {
       setSubmitSuccessMessage('');
-      submitSetErrorMessage(false);
+      submitSetErrorMessage('');
 
-      const response = await fetch('https://apis.codante.io/api/register-user/register', {
-         method: 'POST',
-         headers: {
-            'Content-Type': 'application/json',
-         },
-         body: JSON.stringify(data),
-      });
+      try {
+         const response = await fetch(
+            'https://apis.codante.io/api/register-user/register',
+            {
+               method: 'POST',
+               headers: {
+                  'Content-Type': 'application/json',
+               },
+               body: JSON.stringify(data),
+            }
+         );
 
-      const resData = await response.json();
+         const resData = await response.json();
 
-      if (!response.ok) {
-         for (const field in resData.errors) {
-            submitSetErrorMessage(true);
-            // Exibindo mensagem de erro vinda do back-end
-            setError(field, { type: 'manual', message: resData.errors[field] });
+         if (!response.ok) {
+            for (const field in resData.errors) {
+               submitSetErrorMessage('Erro ao cadastrar usuário.');
+               // Exibindo mensagem de erro no campo vinda do back-end
+               setError(field, { type: 'manual', message: resData.errors[field] });
+               console.log(resData);
+            }
+         } else {
+            reset();
+            setSubmitSuccessMessage(resData.message);
             console.log(resData);
          }
-      } else {
-         reset();
-         setSubmitSuccessMessage(resData.message);
-         console.log(resData);
+      } catch (error) {
+         submitSetErrorMessage('Erro ao enviar os dados, tente mais tarde.');
       }
+
       window.scrollTo({ top: 0, behavior: 'smooth' });
    }
 
@@ -101,10 +114,7 @@ function App() {
             />
          )}
          {submitErrorMessage && (
-            <SubmitMessage
-               textColor='text-orange-400'
-               messageText='Erro ao cadastrar usuário.'
-            />
+            <SubmitMessage textColor='text-orange-400' messageText={submitErrorMessage} />
          )}
          <form
             onSubmit={handleSubmit(onSubmit)}
