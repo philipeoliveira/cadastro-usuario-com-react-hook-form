@@ -1,9 +1,15 @@
 import { useRef, useState } from 'react';
 import { Eye, EyeSlash, SpinnerGap } from '@phosphor-icons/react';
+
 import { FieldValues, useForm } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 import { useHookFormMask } from 'use-mask-input';
+
+import { Header } from './components/Header';
 import { SubmitMessage } from './components/SubmitMessage';
+import { Fieldset } from './components/Fieldset';
+import { InputText } from './components/InputText';
+import { Button } from './components/Button';
 
 function App() {
    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -26,6 +32,7 @@ function App() {
 
    const registerWithMask = useHookFormMask(register);
 
+   // Cria uma referência para lidar com as requisições em paralelo anteriores
    const abortControllerRef = useRef<AbortController | null>(null);
 
    async function handleZipCodeBlur(event: React.FocusEvent<HTMLInputElement>) {
@@ -117,12 +124,7 @@ function App() {
 
    return (
       <main className='min-h-screen flex flex-col items-center justify-center md:p-4'>
-         <div className='flex flex-col items-center justify-center gap-1 w-full max-w-3xl bg-linear-to-t from-teal-600 to-teal-800 md:rounded-t-lg border-b border-teal-500 p-4 pb-5'>
-            <h1 className='text-2xl font-semibold text-shadow-sm text-shadow-teal-800'>
-               Cadastro de Usuário
-            </h1>
-            <h2 className='text-zinc-300'>Formulário com React Hook Form e Zod</h2>
-         </div>
+         <Header />
          {submitSuccessMessage && (
             <SubmitMessage
                textColor='text-teal-600'
@@ -136,21 +138,12 @@ function App() {
             onSubmit={handleSubmit(onSubmit)}
             className='w-full max-w-3xl bg-zinc-800 rounded-b-lg shadow-xl p-6 space-y-6'
          >
-            <fieldset className='flex flex-col gap-3 bg-zinc-700/20 border border-zinc-700 rounded-lg p-5'>
-               <legend className='pt-1 pb-1.5 px-3 md:px-8 bg-zinc-800 border border-zinc-700 rounded-lg text-lg font-semibold text-zinc-300'>
-                  Dados Pessoais
-               </legend>
-
+            <Fieldset legend='Dados Pessoais'>
                <div className='space-y-2'>
-                  <label
-                     htmlFor='name'
-                     className='block text-md font-medium px-1 text-zinc-300'
-                  >
-                     <span>*</span>Nome
-                  </label>
-                  <input
-                     type='text'
+                  <InputText
                      id='name'
+                     label='Nome'
+                     required
                      {...register('name', {
                         required: 'O Nome deve ser preenchido.',
                         minLength: {
@@ -163,23 +156,15 @@ function App() {
                         },
                      })}
                      maxLength={40}
-                     className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md text-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600'
+                     error={errors}
                   />
-                  <p className='text-orange-400 text-sm px-1'>
-                     <ErrorMessage errors={errors} name='name' />
-                  </p>
                </div>
 
                <div className='space-y-2'>
-                  <label
-                     htmlFor='lastName'
-                     className='block text-md font-medium px-1 text-zinc-300'
-                  >
-                     <span>*</span>Sobrenome
-                  </label>
-                  <input
-                     type='text'
+                  <InputText
                      id='lastName'
+                     label='Sobrenome'
+                     required
                      {...register('lastName', {
                         required: 'O Sobrenome deve ser preenchido.',
                         minLength: {
@@ -192,23 +177,15 @@ function App() {
                         },
                      })}
                      maxLength={100}
-                     className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md text-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600'
+                     error={errors}
                   />
-                  <p className='text-orange-400 text-sm px-1'>
-                     <ErrorMessage errors={errors} name='lastName' />
-                  </p>
                </div>
 
                <div className='space-y-2'>
-                  <label
-                     htmlFor='phone'
-                     className='block text-md font-medium px-1 text-zinc-300'
-                  >
-                     <span>*</span>Telefone celular
-                  </label>
-                  <input
-                     type='tel'
+                  <InputText
                      id='phone'
+                     label='Telefone celular'
+                     required
                      placeholder='(__) _____-____'
                      {...registerWithMask('phone', '(99) 99999-9999', {
                         required: 'O Telefone celular deve ser preenchido.',
@@ -218,23 +195,15 @@ function App() {
                         },
                      })}
                      maxLength={15}
-                     className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md text-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600'
+                     error={errors}
                   />
-                  <p className='text-orange-400 text-sm px-1'>
-                     <ErrorMessage errors={errors} name='phone' />
-                  </p>
                </div>
 
                <div className='space-y-2'>
-                  <label
-                     htmlFor='cpf'
-                     className='block text-md font-medium px-1 text-zinc-300'
-                  >
-                     <span>*</span>CPF
-                  </label>
-                  <input
-                     type='text'
+                  <InputText
                      id='cpf'
+                     label='CPF'
+                     required
                      placeholder='___.___.___-__'
                      {...registerWithMask('cpf', '999.999.999-99', {
                         required: 'O CPF deve ser preenchido.',
@@ -244,23 +213,15 @@ function App() {
                         },
                      })}
                      maxLength={14}
-                     className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md text-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600'
+                     error={errors}
                   />
-                  <p className='text-orange-400 text-sm px-1'>
-                     <ErrorMessage errors={errors} name='cpf' />
-                  </p>
                </div>
 
                <div className='space-y-2'>
-                  <label
-                     htmlFor='zipcode'
-                     className='block text-md font-medium px-1 text-zinc-300'
-                  >
-                     <span>*</span>CEP
-                  </label>
-                  <input
-                     type='text'
+                  <InputText
                      id='zipcode'
+                     label='CEP'
+                     required
                      placeholder='_____-___'
                      {...registerWithMask('zipcode', '99999-999', {
                         required: 'O CEP deve ser preenchido.',
@@ -271,30 +232,18 @@ function App() {
                         onBlur: handleZipCodeBlur,
                      })}
                      maxLength={9}
-                     className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md text-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600'
+                     error={errors}
+                     loading={loadingZipcode}
+                     loadingText='Buscando informações do CEP...'
                   />
-                  <p className='text-orange-400 text-sm px-1'>
-                     {loadingZipcode && (
-                        <span className='flex items-center gap-1'>
-                           <SpinnerGap size={20} className='animate-spin' />
-                           Buscando informações do CEP...
-                        </span>
-                     )}
-                     <ErrorMessage errors={errors} name='zipcode' />
-                  </p>
                </div>
 
                <div className='grid grid-cols-1 md:grid-cols-[minmax(200px,_1fr)_150px] gap-4'>
                   <div className='space-y-2'>
-                     <label
-                        htmlFor='address'
-                        className='block text-md font-medium px-1 text-zinc-300'
-                     >
-                        <span>*</span>Endereço
-                     </label>
-                     <input
-                        type='text'
+                     <InputText
                         id='address'
+                        label='Endereço'
+                        required
                         {...register('address', {
                            required: 'O Endereço deve ser preenchido.',
                            minLength: {
@@ -307,23 +256,15 @@ function App() {
                            },
                         })}
                         maxLength={100}
-                        className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md text-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600'
+                        error={errors}
                      />
-                     <p className='text-orange-400 text-sm px-1'>
-                        <ErrorMessage errors={errors} name='address' />
-                     </p>
                   </div>
 
                   <div className='space-y-2'>
-                     <label
-                        htmlFor='addressNumber'
-                        className='block text-md font-medium px-1 text-zinc-300'
-                     >
-                        Número
-                     </label>
-                     <input
-                        type='number'
+                     <InputText
                         id='addressNumber'
+                        label='Número'
+                        type='number'
                         {...register('addressNumber', {
                            maxLength: {
                               value: 6,
@@ -336,74 +277,49 @@ function App() {
                            },
                         })}
                         maxLength={6}
-                        className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md text-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600'
+                        error={errors}
                      />
-                     <p className='text-orange-400 text-sm px-1'>
-                        <ErrorMessage errors={errors} name='addressNumber' />
-                     </p>
                   </div>
                </div>
 
                <div className='grid grid-cols-1 md:grid-cols-[minmax(200px,_1fr)_150px] gap-4'>
                   <div className='space-y-2'>
-                     <label
-                        htmlFor='city'
-                        className='block text-md font-medium px-1 text-zinc-300'
-                     >
-                        <span>*</span>Cidade
-                     </label>
-                     <input
-                        type='text'
+                     <InputText
                         id='city'
+                        label='Cidade'
+                        required
+                        className='disabled:bg-zinc-800'
                         {...register('city', {
                            required: 'Obtenha a Cidade através do CEP.',
                         })}
                         disabled
-                        className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md text-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600 disabled:bg-zinc-800'
+                        error={errors}
                      />
-                     <p className='text-orange-400 text-sm px-1'>
-                        <ErrorMessage errors={errors} name='city' />
-                     </p>
                   </div>
 
                   <div className='space-y-2'>
-                     <label
-                        htmlFor='state'
-                        className='block text-md font-medium px-1 text-zinc-300'
-                     >
-                        <span>*</span>Estado
-                     </label>
-                     <input
-                        type='text'
+                     <InputText
                         id='state'
+                        label='Estado'
+                        required
+                        className='disabled:bg-zinc-800'
                         {...register('state', {
                            required: 'Obtenha o Estado através do CEP.',
                         })}
                         disabled
-                        className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md text-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600 disabled:bg-zinc-800'
+                        error={errors}
                      />
-                     <p className='text-orange-400 text-sm px-1'>
-                        <ErrorMessage errors={errors} name='state' />
-                     </p>
                   </div>
                </div>
-            </fieldset>
+            </Fieldset>
 
-            <fieldset className='flex flex-col gap-3 bg-zinc-700/20 border border-zinc-700 rounded-lg p-5'>
-               <legend className='pt-1 pb-1.5 px-3 md:px-8 bg-zinc-800 border border-zinc-700 rounded-lg text-lg font-semibold text-zinc-300'>
-                  Credenciais
-               </legend>
-
+            <Fieldset legend='Credenciais'>
                <div className='space-y-2'>
-                  <label
-                     htmlFor='email'
-                     className='block text-md font-medium px-1 text-zinc-300'
-                  >
-                     <span>*</span>E-mail
-                  </label>
-                  <input
-                     type='email'
+                  <InputText
                      id='email'
+                     label='E-mail'
+                     type='email'
+                     required
                      {...register('email', {
                         required: 'O E-mail deve ser preenchido.',
                         pattern: {
@@ -411,11 +327,8 @@ function App() {
                            message: 'E-mail inválido.',
                         },
                      })}
-                     className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md text-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600'
+                     error={errors}
                   />
-                  <p className='text-orange-400 text-sm px-1'>
-                     <ErrorMessage errors={errors} name='email' />
-                  </p>
                </div>
 
                <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
@@ -531,13 +444,9 @@ function App() {
                      </div>
                   </div>
                </div>
-            </fieldset>
+            </Fieldset>
 
-            <fieldset className='flex flex-col gap-1 bg-zinc-700/20 border border-zinc-700 rounded-lg p-5'>
-               <legend className='pt-1 pb-1.5 px-3 md:px-8 bg-zinc-800 border border-zinc-700 rounded-lg text-lg font-semibold text-zinc-300'>
-                  Termos de Uso
-               </legend>
-
+            <Fieldset legend='Termos de Uso'>
                <div className='flex items-center'>
                   <label
                      htmlFor='terms'
@@ -565,15 +474,11 @@ function App() {
                <p className='text-orange-400 text-sm px-1'>
                   <ErrorMessage errors={errors} name='terms' />
                </p>
-            </fieldset>
+            </Fieldset>
 
             <p className='text-sm text-zinc-400'>* Campos obrigatórios</p>
 
-            <button
-               type='submit'
-               disabled={isSubmitting}
-               className='flex items-center justify-center gap-2 w-full bg-teal-800 text-white font-semibold py-2 px-4 rounded-md hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-600 focus:ring-offset-2 focus:ring-offset-zinc-800 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed'
-            >
+            <Button isSubmitting={isSubmitting}>
                {isSubmitting ? (
                   <>
                      <SpinnerGap size={20} className='animate-spin' />
@@ -582,7 +487,7 @@ function App() {
                ) : (
                   'Cadastrar'
                )}
-            </button>
+            </Button>
          </form>
       </main>
    );
