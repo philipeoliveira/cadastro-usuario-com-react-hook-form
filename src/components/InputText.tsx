@@ -1,10 +1,11 @@
 import { forwardRef } from 'react';
 import { ErrorMessage } from '@hookform/error-message';
 import { SpinnerGap } from '@phosphor-icons/react';
+import { FieldValues, FieldErrors } from 'react-hook-form';
 
 interface InputTextProps extends React.InputHTMLAttributes<HTMLInputElement> {
    label: string;
-   error?: any;
+   error?: FieldErrors<FieldValues>;
    required?: boolean;
    loading?: boolean;
    loadingText?: string;
