@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Eye, EyeSlash, SpinnerGap } from '@phosphor-icons/react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
@@ -26,10 +26,19 @@ function App() {
 
    const registerWithMask = useHookFormMask(register);
 
+   const abortControllerRef = useRef<AbortController | null>(null);
+
    async function handleZipCodeBlur(event: React.FocusEvent<HTMLInputElement>) {
       setValue('city', '');
       setValue('state', '');
       clearErrors('zipcode');
+
+      // Cancela a requisição anterior, se houver
+      abortControllerRef.current?.abort();
+
+      // Cria um novo AbortController para a requisição atual
+      const newAbortControllerRef = new AbortController();
+      abortControllerRef.current = newAbortControllerRef;
 
       const zipcode = event.target.value;
 
@@ -40,7 +49,9 @@ function App() {
             return;
          }
 
-         const response = await fetch(`https://brasilapi.com.br/api/cep/v2/${zipcode}`);
+         const response = await fetch(`https://brasilapi.com.br/api/cep/v2/${zipcode}`, {
+            signal: abortControllerRef.current?.signal,
+         });
 
          if (!response.ok) {
             throw new Error('Erro ao buscar informações do CEP.');
@@ -56,7 +67,7 @@ function App() {
          clearErrors('city');
          clearErrors('state');
       } catch (error) {
-         // Evita mostrar o erro de requisições em paralelo anteriores
+         // Condição que impede de mostrar o erro de requisições em paralelo anteriores
          if (getValues('city') === '') {
             // Se receber uma exceção direta do fetch (CORS ou timeout) e não uma resposta do back-end
             setError('zipcode', { type: 'manual', message: 'CEP não encontrado.' });
