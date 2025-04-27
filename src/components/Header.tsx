@@ -4,7 +4,7 @@ export function Header() {
          <h1 className='text-2xl font-semibold text-shadow-sm text-shadow-teal-800'>
             Cadastro de Usuário
          </h1>
-         <h2 className='text-zinc-300'>Formulário com React Hook Form e Zod</h2>
+         <h2 className='text-zinc-300'>Formulário com React Hook Form</h2>
       </div>
    );
 }
