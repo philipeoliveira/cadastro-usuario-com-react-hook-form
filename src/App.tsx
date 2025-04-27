@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Eye, EyeSlash, SpinnerGap } from '@phosphor-icons/react';
+import { SpinnerGap } from '@phosphor-icons/react';
 
 import { FieldValues, useForm } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
@@ -8,12 +8,10 @@ import { useHookFormMask } from 'use-mask-input';
 import { Header } from './components/Header';
 import { SubmitMessage } from './components/SubmitMessage';
 import { Fieldset } from './components/Fieldset';
-import { InputText } from './components/InputText';
+import { Input } from './components/Input';
 import { Button } from './components/Button';
 
 function App() {
-   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
    const [loadingZipcode, setLoadingZipcode] = useState(false);
    // Mensagens ao submeter os dados, exibidas no topo do formulário
    const [submitSuccessMessage, setSubmitSuccessMessage] = useState('');
@@ -140,7 +138,7 @@ function App() {
          >
             <Fieldset legend='Dados Pessoais'>
                <div className='space-y-2'>
-                  <InputText
+                  <Input
                      id='name'
                      label='Nome'
                      required
@@ -161,7 +159,7 @@ function App() {
                </div>
 
                <div className='space-y-2'>
-                  <InputText
+                  <Input
                      id='lastName'
                      label='Sobrenome'
                      required
@@ -182,9 +180,10 @@ function App() {
                </div>
 
                <div className='space-y-2'>
-                  <InputText
+                  <Input
                      id='phone'
                      label='Telefone celular'
+                     type='tel'
                      required
                      placeholder='(__) _____-____'
                      {...registerWithMask('phone', '(99) 99999-9999', {
@@ -200,7 +199,7 @@ function App() {
                </div>
 
                <div className='space-y-2'>
-                  <InputText
+                  <Input
                      id='cpf'
                      label='CPF'
                      required
@@ -218,7 +217,7 @@ function App() {
                </div>
 
                <div className='space-y-2'>
-                  <InputText
+                  <Input
                      id='zipcode'
                      label='CEP'
                      required
@@ -240,7 +239,7 @@ function App() {
 
                <div className='grid grid-cols-1 md:grid-cols-[minmax(200px,_1fr)_150px] gap-4'>
                   <div className='space-y-2'>
-                     <InputText
+                     <Input
                         id='address'
                         label='Endereço'
                         required
@@ -261,10 +260,9 @@ function App() {
                   </div>
 
                   <div className='space-y-2'>
-                     <InputText
+                     <Input
                         id='addressNumber'
                         label='Número'
-                        type='number'
                         {...register('addressNumber', {
                            maxLength: {
                               value: 6,
@@ -284,7 +282,7 @@ function App() {
 
                <div className='grid grid-cols-1 md:grid-cols-[minmax(200px,_1fr)_150px] gap-4'>
                   <div className='space-y-2'>
-                     <InputText
+                     <Input
                         id='city'
                         label='Cidade'
                         required
@@ -298,7 +296,7 @@ function App() {
                   </div>
 
                   <div className='space-y-2'>
-                     <InputText
+                     <Input
                         id='state'
                         label='Estado'
                         required
@@ -315,7 +313,7 @@ function App() {
 
             <Fieldset legend='Credenciais'>
                <div className='space-y-2'>
-                  <InputText
+                  <Input
                      id='email'
                      label='E-mail'
                      type='email'
@@ -326,122 +324,63 @@ function App() {
                            value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                            message: 'E-mail inválido.',
                         },
+                        maxLength: {
+                           value: 100,
+                           message: 'O E-mail deve ter no máximo 100 caracteres.',
+                        },
                      })}
+                     maxLength={100}
                      error={errors}
                   />
                </div>
 
                <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                   <div className='space-y-2'>
-                     <label
-                        htmlFor='password'
-                        className='block text-md font-medium px-1 text-zinc-300'
-                     >
-                        <span>*</span>Senha
-                     </label>
-                     <div className='relative space-y-2'>
-                        <input
-                           type={isPasswordVisible ? 'text' : 'password'}
-                           id='password'
-                           {...register('password', {
-                              required: 'A Senha deve ser preenchida.',
-                              minLength: {
-                                 value: 8,
-                                 message: 'A Senha deve ter no mínimo 8 caracteres.',
-                              },
-                              maxLength: {
-                                 value: 24,
-                                 message: 'A Senha deve ter no máximo 24 caracteres.',
-                              },
-                           })}
-                           maxLength={24}
-                           className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md text-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600'
-                        />
-                        <p className='text-orange-400 text-sm px-1'>
-                           <ErrorMessage errors={errors} name='password' />
-                        </p>
-                        <span className='absolute right-3 top-2'>
-                           <button
-                              type='button'
-                              className='cursor-pointer'
-                              title={
-                                 isPasswordVisible ? 'Ocultar senha' : 'Mostrar senha'
-                              }
-                              aria-label={
-                                 isPasswordVisible ? 'Ocultar senha' : 'Mostrar senha'
-                              }
-                              onClick={() => setIsPasswordVisible(!isPasswordVisible)}
-                           >
-                              {isPasswordVisible ? (
-                                 <Eye size={24} />
-                              ) : (
-                                 <EyeSlash size={24} />
-                              )}
-                           </button>
-                        </span>
-                     </div>
+                     <Input
+                        id='password'
+                        label='Senha'
+                        type='password'
+                        required
+                        {...register('password', {
+                           required: 'A Senha deve ser preenchida.',
+                           minLength: {
+                              value: 8,
+                              message: 'A Senha deve ter no mínimo 8 caracteres.',
+                           },
+                           maxLength: {
+                              value: 24,
+                              message: 'A Senha deve ter no máximo 24 caracteres.',
+                           },
+                        })}
+                        maxLength={24}
+                        error={errors}
+                     />
                   </div>
                   <div className='space-y-2'>
-                     <label
-                        htmlFor='confirmPassword'
-                        className='block text-md font-medium px-1 text-zinc-300'
-                     >
-                        <span>*</span>Confirmar senha
-                     </label>
-                     <div className='relative space-y-2'>
-                        <input
-                           type={isConfirmPasswordVisible ? 'text' : 'password'}
-                           id='confirmPassword'
-                           {...register('password_confirmation', {
-                              required: 'A Confirmação de senha deve ser preenchida.',
-                              minLength: {
-                                 value: 8,
-                                 message:
-                                    'A Confirmação deve ter no mínimo 8 caracteres.',
-                              },
-                              maxLength: {
-                                 value: 24,
-                                 message:
-                                    'A Confirmação deve ter no máximo 24 caracteres.',
-                              },
-                              validate: (value, formValues) => {
-                                 if (value !== formValues.password) {
-                                    return 'As senhas não coincidem.';
-                                 }
-                              },
-                           })}
-                           maxLength={24}
-                           className='w-full px-3 py-2 bg-zinc-900 border border-zinc-600 rounded-md text-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600'
-                        />
-                        <p className='text-orange-400 text-sm px-1'>
-                           <ErrorMessage errors={errors} name='password_confirmation' />
-                        </p>
-                        <span className='absolute right-3 top-2'>
-                           <button
-                              type='button'
-                              className='cursor-pointer'
-                              title={
-                                 isConfirmPasswordVisible
-                                    ? 'Ocultar senha'
-                                    : 'Mostrar senha'
+                     <Input
+                        id='confirmPassword'
+                        label='Confirmar senha'
+                        type='password'
+                        required
+                        {...register('password_confirmation', {
+                           required: 'A Confirmação de senha deve ser preenchida.',
+                           minLength: {
+                              value: 8,
+                              message: 'A Confirmação deve ter no mínimo 8 caracteres.',
+                           },
+                           maxLength: {
+                              value: 24,
+                              message: 'A Confirmação deve ter no máximo 24 caracteres.',
+                           },
+                           validate: (value, formValues) => {
+                              if (value !== formValues.password) {
+                                 return 'As senhas não coincidem.';
                               }
-                              aria-label={
-                                 isConfirmPasswordVisible
-                                    ? 'Ocultar senha'
-                                    : 'Mostrar senha'
-                              }
-                              onClick={() =>
-                                 setIsConfirmPasswordVisible(!isConfirmPasswordVisible)
-                              }
-                           >
-                              {isConfirmPasswordVisible ? (
-                                 <Eye size={24} />
-                              ) : (
-                                 <EyeSlash size={24} />
-                              )}
-                           </button>
-                        </span>
-                     </div>
+                           },
+                        })}
+                        maxLength={24}
+                        error={errors}
+                     />
                   </div>
                </div>
             </Fieldset>
