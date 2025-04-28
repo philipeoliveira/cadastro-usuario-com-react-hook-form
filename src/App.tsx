@@ -19,7 +19,6 @@ function App() {
 
    const {
       register,
-      getValues,
       setValue,
       setError,
       clearErrors,
@@ -72,11 +71,9 @@ function App() {
          clearErrors('city');
          clearErrors('state');
       } catch (error) {
-         // Condição que impede de mostrar o erro de requisições em paralelo anteriores
-         if (getValues('city') === '') {
-            // Se receber uma exceção direta do fetch (CORS ou timeout) e não uma resposta do back-end
-            setError('zipcode', { type: 'manual', message: 'CEP não encontrado.' });
-         }
+         // Se receber uma exceção direta do fetch (CORS ou timeout) e não uma resposta do back-end
+         setError('zipcode', { type: 'manual', message: 'CEP não encontrado.' });
+
          console.log(error);
       } finally {
          setLoadingZipcode(false);
