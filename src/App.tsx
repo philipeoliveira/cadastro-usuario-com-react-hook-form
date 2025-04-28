@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { SpinnerGap } from '@phosphor-icons/react';
+import axios from 'axios';
 
 import { FieldValues, useForm } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
@@ -43,13 +44,10 @@ function App() {
             return;
          }
 
-         const response = await fetch(`https://brasilapi.com.br/api/cep/v2/${zipcode}`);
-
-         if (!response.ok) {
-            throw new Error('Erro ao buscar informações do CEP.');
-         }
-
-         const data = await response.json();
+         const { data } = await axios.get(
+            `https://brasilapi.com.br/api/cep/v2/${zipcode}`,
+            { timeout: 60000 } // 60 segundos
+         );
 
          // Preenchendo os campos Cidade e Estado com os dados do CEP
          setValue('city', data.city);
@@ -59,8 +57,16 @@ function App() {
          clearErrors('city');
          clearErrors('state');
       } catch (error) {
-         // Se receber uma exceção direta do fetch (CORS ou timeout) e não uma resposta do back-end
-         setError('zipcode', { type: 'manual', message: 'CEP não encontrado.' });
+         // Requisição cancelada por timeout configurado no axios
+         if (axios.isAxiosError(error) && error.code === 'ECONNABORTED') {
+            console.error('Requisição cancelada por timeout!');
+            setError('zipcode', {
+               type: 'manual',
+               message: 'A busca demorou demais, tente novamente.',
+            });
+         } else {
+            setError('zipcode', { type: 'manual', message: 'CEP não encontrado.' });
+         }
 
          console.log(error);
       } finally {
@@ -73,33 +79,33 @@ function App() {
       submitSetErrorMessage('');
 
       try {
-         const response = await fetch(
+         const { data: resData } = await axios.post(
             'https://apis.codante.io/api/register-user/register',
+            data,
             {
-               method: 'POST',
+               timeout: 60000, // 60 segundos
                headers: {
                   'Content-Type': 'application/json',
                },
-               body: JSON.stringify(data),
             }
          );
 
-         const resData = await response.json();
-
-         if (!response.ok) {
-            for (const field in resData.errors) {
+         reset();
+         setSubmitSuccessMessage(resData.message);
+         console.log(resData);
+      } catch (error) {
+         if (axios.isAxiosError(error) && error.response?.data?.errors) {
+            const errors = error.response.data.errors;
+            for (const field in errors) {
                submitSetErrorMessage('Erro ao cadastrar usuário.');
                // Exibindo mensagem de erro no campo vinda do back-end
-               setError(field, { type: 'manual', message: resData.errors[field] });
-               console.log(resData);
+               setError(field, { type: 'manual', message: errors[field] });
+               console.log(error);
             }
          } else {
-            reset();
-            setSubmitSuccessMessage(resData.message);
-            console.log(resData);
+            // Erros de rede, timeout, etc
+            submitSetErrorMessage('Erro ao enviar os dados, tente mais tarde.');
          }
-      } catch (error) {
-         submitSetErrorMessage('Erro ao enviar os dados, tente mais tarde.');
       }
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
