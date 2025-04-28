@@ -1,16 +1,16 @@
+import axios from 'axios';
 import { useState } from 'react';
 import { SpinnerGap } from '@phosphor-icons/react';
-import axios from 'axios';
 
 import { FieldValues, useForm } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 import { useHookFormMask } from 'use-mask-input';
 
 import { Header } from './components/Header';
-import { SubmitMessage } from './components/SubmitMessage';
 import { Fieldset } from './components/Fieldset';
 import { Input } from './components/Input';
 import { Button } from './components/Button';
+import { SubmitMessage } from './components/SubmitMessage';
 
 function App() {
    const [loadingZipcode, setLoadingZipcode] = useState(false);
