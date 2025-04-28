@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { SpinnerGap } from '@phosphor-icons/react';
 
 import { FieldValues, useForm } from 'react-hook-form';
@@ -29,20 +29,10 @@ function App() {
 
    const registerWithMask = useHookFormMask(register);
 
-   // Cria uma referência para lidar com as requisições em paralelo anteriores
-   const abortControllerRef = useRef<AbortController | null>(null);
-
    async function handleZipCodeBlur(event: React.FocusEvent<HTMLInputElement>) {
       setValue('city', '');
       setValue('state', '');
       clearErrors('zipcode');
-
-      // Cancela a requisição anterior, se houver
-      abortControllerRef.current?.abort();
-
-      // Cria um novo AbortController para a requisição atual
-      const newAbortControllerRef = new AbortController();
-      abortControllerRef.current = newAbortControllerRef;
 
       const zipcode = event.target.value;
 
@@ -53,9 +43,7 @@ function App() {
             return;
          }
 
-         const response = await fetch(`https://brasilapi.com.br/api/cep/v2/${zipcode}`, {
-            signal: abortControllerRef.current?.signal,
-         });
+         const response = await fetch(`https://brasilapi.com.br/api/cep/v2/${zipcode}`);
 
          if (!response.ok) {
             throw new Error('Erro ao buscar informações do CEP.');
@@ -231,6 +219,10 @@ function App() {
                      error={errors}
                      loading={loadingZipcode}
                      loadingText='Buscando informações do CEP...'
+                     disabled={loadingZipcode}
+                     className={`${
+                        loadingZipcode ? 'disabled:bg-zinc-800 text-zinc-400' : ''
+                     }`}
                   />
                </div>
 
