@@ -14,9 +14,6 @@ import { SubmitMessage } from './components/SubmitMessage';
 
 function App() {
    const [loadingZipcode, setLoadingZipcode] = useState(false);
-   // Mensagens ao submeter os dados, exibidas no topo do formulário
-   const [submitSuccessMessage, setSubmitSuccessMessage] = useState('');
-   const [submitErrorMessage, submitSetErrorMessage] = useState('');
 
    const {
       register,
@@ -25,10 +22,19 @@ function App() {
       clearErrors,
       handleSubmit,
       reset,
-      formState: { isSubmitting, errors },
+      formState: { isSubmitting, errors, isSubmitSuccessful, submitCount },
    } = useForm();
 
    const registerWithMask = useHookFormMask(register);
+
+   const scrollToTop = () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+   };
+
+   // Função para lidar com erros de validação
+   const onError = () => {
+      scrollToTop();
+   };
 
    async function handleZipCodeBlur(event: React.FocusEvent<HTMLInputElement>) {
       setValue('city', '');
@@ -40,7 +46,16 @@ function App() {
       setLoadingZipcode(true);
 
       try {
+         /**
+          * Apesar do required no input do zipcode,
+          * esse if evita a requisição caso o usuário não tenha preenchido o campo
+          */
          if (zipcode === '') {
+            console.log(zipcode.length);
+            setError('zipcode', {
+               type: 'manual',
+               message: 'O CEP não foi preenchido.',
+            });
             return;
          }
 
@@ -75,15 +90,12 @@ function App() {
    }
 
    async function onSubmit(data: FieldValues) {
-      setSubmitSuccessMessage('');
-      submitSetErrorMessage('');
-
       try {
          const { data: resData } = await axios.post(
             'https://apis.codante.io/api/register-user/register',
             data,
             {
-               timeout: 60000, // 60 segundos
+               timeout: 60000,
                headers: {
                   'Content-Type': 'application/json',
                },
@@ -91,40 +103,37 @@ function App() {
          );
 
          reset();
-         setSubmitSuccessMessage(resData.message);
          console.log(resData);
       } catch (error) {
          if (axios.isAxiosError(error) && error.response?.data?.errors) {
             const errors = error.response.data.errors;
             for (const field in errors) {
-               submitSetErrorMessage('Erro ao cadastrar usuário.');
-               // Exibindo mensagem de erro no campo vinda do back-end
                setError(field, { type: 'manual', message: errors[field] });
                console.log(error);
             }
-         } else {
-            // Erros de rede, timeout, etc
-            submitSetErrorMessage('Erro ao enviar os dados, tente mais tarde.');
          }
       }
 
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      scrollToTop();
    }
 
    return (
       <main className='min-h-screen flex flex-col items-center justify-center md:p-4'>
          <Header />
-         {submitSuccessMessage && (
+         {isSubmitSuccessful && (
             <SubmitMessage
                textColor='text-teal-600'
-               messageText={`${submitSuccessMessage} (Usuário cadastrado com sucesso!)`}
+               messageText='Usuário cadastrado com sucesso!'
             />
          )}
-         {submitErrorMessage && (
-            <SubmitMessage textColor='text-orange-400' messageText={submitErrorMessage} />
+         {submitCount > 0 && !isSubmitSuccessful && (
+            <SubmitMessage
+               textColor='text-orange-400'
+               messageText='Erro ao cadastrar usuário. Tente novamente.'
+            />
          )}
          <form
-            onSubmit={handleSubmit(onSubmit)}
+            onSubmit={handleSubmit(onSubmit, onError)}
             className='w-full max-w-3xl bg-zinc-800 rounded-b-lg shadow-xl p-6 space-y-6'
          >
             <Fieldset legend='Dados Pessoais'>
