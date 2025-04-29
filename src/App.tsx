@@ -141,6 +141,7 @@ function App() {
                      })}
                      maxLength={40}
                      error={errors}
+                     autoComplete='name'
                   />
                </div>
 
@@ -181,6 +182,7 @@ function App() {
                      })}
                      maxLength={15}
                      error={errors}
+                     autoComplete='tel'
                   />
                </div>
 
@@ -246,6 +248,7 @@ function App() {
                         })}
                         maxLength={100}
                         error={errors}
+                        autoComplete='street-address'
                      />
                   </div>
 
@@ -321,6 +324,7 @@ function App() {
                      })}
                      maxLength={100}
                      error={errors}
+                     autoComplete='email'
                   />
                </div>
 
