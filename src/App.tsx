@@ -31,7 +31,7 @@ function App() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
    }
 
-   // Função para lidar com erros de validação
+   // Função para lidar com erros de validação ao submeter o form
    function onError() {
       scrollToTop();
    }
