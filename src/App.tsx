@@ -27,14 +27,14 @@ function App() {
 
    const registerWithMask = useHookFormMask(register);
 
-   const scrollToTop = () => {
+   function scrollToTop() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
-   };
+   }
 
    // Função para lidar com erros de validação
-   const onError = () => {
+   function onError() {
       scrollToTop();
-   };
+   }
 
    async function handleZipCodeBlur(event: React.FocusEvent<HTMLInputElement>) {
       setValue('city', '');
