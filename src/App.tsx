@@ -69,7 +69,6 @@ function App() {
       } catch (error) {
          // Requisição cancelada por timeout configurado no axios
          if (axios.isAxiosError(error) && error.code === 'ECONNABORTED') {
-            console.error('Requisição cancelada por timeout!');
             setError('zipcode', {
                type: 'manual',
                message: 'A busca demorou demais, tente novamente.',
@@ -77,8 +76,6 @@ function App() {
          } else {
             setError('zipcode', { type: 'manual', message: 'CEP não encontrado.' });
          }
-
-         console.log(error);
       } finally {
          setLoadingZipcode(false);
       }
@@ -86,25 +83,19 @@ function App() {
 
    async function onSubmit(data: FieldValues) {
       try {
-         const { data: resData } = await axios.post(
-            'https://apis.codante.io/api/register-user/register',
-            data,
-            {
-               timeout: 60000,
-               headers: {
-                  'Content-Type': 'application/json',
-               },
-            }
-         );
+         await axios.post('https://apis.codante.io/api/register-user/register', data, {
+            timeout: 60000,
+            headers: {
+               'Content-Type': 'application/json',
+            },
+         });
 
          reset();
-         console.log(resData);
       } catch (error) {
          if (axios.isAxiosError(error) && error.response?.data?.errors) {
             const errors = error.response.data.errors;
             for (const field in errors) {
                setError(field, { type: 'manual', message: errors[field] });
-               console.log(error);
             }
          }
       }
