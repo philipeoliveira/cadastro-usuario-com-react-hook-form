@@ -51,11 +51,6 @@ function App() {
           * esse if evita a requisição caso o usuário não tenha preenchido o campo
           */
          if (zipcode === '') {
-            console.log(zipcode.length);
-            setError('zipcode', {
-               type: 'manual',
-               message: 'O CEP não foi preenchido.',
-            });
             return;
          }
 
