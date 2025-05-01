@@ -263,7 +263,7 @@ function App() {
                                  'O Número do Endereço deve ter no máximo 6 caracteres.',
                            },
                            pattern: {
-                              value: /^\d{1,6}$/,
+                              value: /^\d{0,6}$/,
                               message: 'Número inválido.',
                            },
                         })}
