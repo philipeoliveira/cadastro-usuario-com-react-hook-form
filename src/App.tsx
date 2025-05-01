@@ -260,7 +260,7 @@ function App() {
                            maxLength: {
                               value: 6,
                               message:
-                                 'O número do endereço deve ter no máximo 6 caracteres.',
+                                 'O Número do Endereço deve ter no máximo 6 caracteres.',
                            },
                            pattern: {
                               value: /^\d{1,6}$/,
