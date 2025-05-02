@@ -1,6 +1,6 @@
 # Cadastro de Usuário
 
-Código em React e TypeScript, utilizando a biblioteca Hook Forms, para a criação de um formulário de Cadastro de Usuário. Contém uma área com campos para Dados Pessoais, outra para Credenciais de login e uma para Termos de Uso.
+Código em React e TypeScript, utilizando a biblioteca Hook Form, para a criação de um formulário de Cadastro de Usuário. Contém uma área com campos para Dados Pessoais, outra para Credenciais de login e uma para Termos de Uso.
 
 ## 🚀 Funcionalidades
 
